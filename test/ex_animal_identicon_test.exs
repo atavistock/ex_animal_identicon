@@ -6,6 +6,16 @@ defmodule ExAnimalIdenticonTest do
     assert String.contains?(icon, "</svg>")
   end
 
+  test "has a background color" do
+    {:ok, icon} = ExAnimalIdenticon.svg(1)
+    assert String.match?(icon, ~r<background-color: #[0-9a-f]{6}>)
+  end
+
+  test "has an animal link" do
+    {:ok, icon} = ExAnimalIdenticon.svg(1)
+    assert String.match?(icon, ~r<profile/\w{3,}_lg.png>)
+  end
+
   test "supports any term" do
     {:ok, icon} = ExAnimalIdenticon.svg(:foo)
     assert String.contains?(icon, "</svg>")
@@ -34,5 +44,4 @@ defmodule ExAnimalIdenticonTest do
     {:ok, icon} = ExAnimalIdenticon.svg("blah", type: :circle)
     assert String.contains?(icon, "border-radius: 50%")
   end
-
 end

@@ -1,5 +1,4 @@
 defmodule ExAnimalIdenticon do
-
   @animals ~w(
     alligator anteater armadillo auroch badger bat beaver buffalo camel capybara
     chameleon cheetah chinchilla chipmunk chupacabra cormorant coyote crow dingo
@@ -20,34 +19,44 @@ defmodule ExAnimalIdenticon do
     #311acb #401acb #521acb #611acb
   )
 
-  @spec svg(any(), Keyword.t()) :: {:ok, binary}
+  @spec svg(any, Keyword.t()) :: {:ok, binary}
   def svg(term, opts \\ []) do
     {animal, color} = identicon_from_term(term)
 
-    radius = if opts[:type] == :circle, do: "border-radius: 50%;", else: ""
-    size = opts[:size] || 128
+    args = %{
+      radius: if(opts[:type] == :circle, do: "border-radius: 50%;", else: nil),
+      size: opts[:size] || 128,
+      color: color,
+      animal: animal
+    }
+
+    {:ok, render(args)}
+  end
+
+  @spe render(map) :: binary
+  defp render(%{radius: radius, size: size, color: color, animal: animal}) do
     dimensions = "height: #{size}px; width: #{size}px"
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
 
-    {:ok,
-      """
-        <svg style="background-color: ##{color}; #{dimensions}; #{radius}">
-          <image xlink:href="#{url}" style="#{dimensions}:></image>
-        </svg>
-      """
-    }
+    """
+      <svg style="background-color: #{color}; #{dimensions}; #{radius}">
+        <image xlink:href="#{url}" style="#{dimensions}:></image>
+      </svg>
+    """
+    |> String.replace(~r/\s+/, " ")
   end
 
+  @spec identicon_from_term(any) :: {binary, binary}
   defp identicon_from_term(term) do
     <<
-      _::size(32),
-      animal_id::size(12),
-      color_id::size(12),
+      _::size(48),
+      animal_id::size(6),
+      color_id::size(6),
       _::bitstring
     >> = :erlang.term_to_binary(term) |> then(&:crypto.hash(:blake2b, &1))
+
     animal = Enum.at(@animals, animal_id)
     color = Enum.at(@colors, color_id)
     {animal, color}
   end
-
 end
