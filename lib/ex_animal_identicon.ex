@@ -1,4 +1,9 @@
 defmodule ExAnimalIdenticon do
+  @moduledoc """
+    Generate an Identicon based on a key which use an animal image with a
+    background color
+  """
+
   @animals ~w(
     alligator anteater armadillo auroch badger bat beaver buffalo camel capybara
     chameleon cheetah chinchilla chipmunk chupacabra cormorant coyote crow dingo
@@ -33,7 +38,7 @@ defmodule ExAnimalIdenticon do
     {:ok, render(args)}
   end
 
-  @spe render(map) :: binary
+  @spec render(map) :: binary
   defp render(%{radius: radius, size: size, color: color, animal: animal}) do
     dimensions = "height: #{size}px; width: #{size}px"
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
