@@ -14,32 +14,90 @@ defmodule ExAnimalIdenticon do
     walrus wolf wolverine wombat
   )
 
-  @colors ~w(
-    #721acb #841acb #931acb #a51acb #b41acb #c51acb #cb1abf #cb1ab1 #cb1a9f #cb1a8d
-    #cb1a7e #cb1a6c #cb1a5e #cb1a4c #cb1a3a #cb1a2b #cb1a1a #cb2b1a #cb3a1a #cb4c1a
-    #cb5e1a #cb6c1a #cb7e1a #cb8d1a #cb9f1a #cbb11a #cbbf1a #c5cb1a #b4cb1a #a5cb1a
-    #93cb1a #84cb1a #72cb1a #61cb1a #52cb1a #40cb1a #31cb1a #1fcb1a #1acb25 #1acb34
-    #1acb46 #1acb58 #1acb67 #1acb78 #1acb87 #1acb99 #1acbab #1acbb9 #1acbcb #1ab9cb
-    #1aabcb #1a99cb #1a87cb #1a78cb #1a67cb #1a58cb #1a46cb #1a34cb #1a25cb #1f1acb
-    #311acb #401acb #521acb #611acb
-  )
+  @colors %{
+    "#FF0000" => "Red",
+    "#FFA500" => "Orange",
+    "#FFFF00" => "Yellow",
+    "#FFC0CB" => "Pink",
+    "#ADD8E6" => "Light Blue",
+    "#0000FF" => "Blue",
+    "#00FFFF" => "Cyan",
+    "#008000" => "Green",
+    "#00008B" => "Dark Blue",
+    "#800080" => "Purple",
+    "#7FFFD4" => "Aquamarine",
+    "#FF00FF" => "Magenta",
+    "#00FF00" => "Lime",
+    "#800000" => "Maroon",
+    "#93917C" => "Millennium Jade",
+    "#FFCE44" => "Chrome Gold",
+    "#4863A0" => "Azure Blue",
+    "#660000" => "Red Blood",
+    "#A52A2A" => "Brown",
+    "#966F33" => "Wood",
+    "#728FCE" => "Light Purple Blue",
+    "#22CE83" => "Isle Of Man Green",
+    "#1589FF" => "Neon Blue",
+    "#FBE7A1" => "Golden Blonde",
+    "#FFFF33" => "Neon Yellow",
+    "#36013F" => "Deep Purple",
+    "#95B9C7" => "Baby Blue",
+    "#87CEEB" => "SkyBlue",
+    "#2B65EC" => "Ocean Blue",
+    "#FFD700" => "Gold",
+    "#006400" => "Dark Green",
+    "#368BC1" => "Glacial Blue Ice",
+    "#151B54" => "Night Blue",
+    "#EB5406" => "Red Gold",
+    "#1E90FF" => "Dodger Blue",
+    "#0041C2" => "Blueberry Blue",
+    "#357EC7" => "Windows Blue",
+    "#E799A3" => "Pink Daisy",
+    "#583759" => "Plum Purple",
+    "#F98B88" => "Peach Pink",
+    "#F535AA" => "Neon Pink",
+    "#90EE90" => "Light Green",
+    "#254117" => "Dark Forest Green",
+    "#835C3B" => "Brown Bear",
+    "#AA6C39" => "Dark Gold",
+    "#E42217" => "Lava Red",
+    "#EE82EE" => "Violet",
+    "#C48189" => "Pink Brown",
+    "#6F4E37" => "Coffee",
+    "#FDD7E4" => "Pinky",
+    "#E8ADAA" => "Rose",
+    "#000080" => "Navy",
+    "#848B79" => "Sage Green",
+    "#14A3C7" => "Cyan Blue",
+    "#9D00FF" => "Neon Purple",
+    "#4B0082" => "Indigo",
+    "#FDD017" => "Bright Gold",
+    "#2F539B" => "Bright Blue",
+    "#FDBD01" => "Neon Gold",
+    "#0000A0" => "New Midnight Blue",
+    "#C19A6B" => "Camel Brown",
+    "#FFDB58" => "Mustard Yellow",
+    "#85BB65" => "Dollar Bill Green",
+    "#6495ED" => "Cornflower Blue"
+  }
 
-  @spec svg(any, Keyword.t()) :: {:ok, binary}
-  def svg(term, opts \\ []) do
+  @spec generate(any(), Keyword.t()) :: {:ok, %{svg: binary, name: binary}}
+  def generate(term, opts \\ []) do
     {animal, color} = identicon_from_term(term)
 
-    args = %{
-      radius: if(opts[:type] == :circle, do: "border-radius: 50%;", else: nil),
-      size: opts[:size] || 128,
-      color: color,
-      animal: animal
+    result = %{
+      svg: svg(animal, color, opts),
+      name: name(animal, color)
     }
 
-    {:ok, render(args)}
+    {:ok, result}
   end
 
-  @spec render(map) :: binary
-  defp render(%{radius: radius, size: size, color: color, animal: animal}) do
+
+  @spec svg(binary, binary, Keyword.t()) :: nonempty_binary()
+  defp svg(animal, color, opts) do
+    radius = if(opts[:type] == :circle, do: "border-radius: 50%;", else: nil)
+    size = opts[:size] || 128
     dimensions = "height: #{size}px; width: #{size}px"
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
 
@@ -49,6 +107,12 @@ defmodule ExAnimalIdenticon do
       </svg>
     """
     |> String.replace(~r/\s+/, " ")
+  end
+
+  @spec name(binary, binary) :: nonempty_binary()
+  defp name(animal, color) do
+    animal_name = animal |> String.capitalize()
+    "#{Map.get(@colors, color)} #{animal_name}"
   end
 
   @spec identicon_from_term(any) :: {binary, binary}
@@ -61,7 +125,7 @@ defmodule ExAnimalIdenticon do
     >> = :erlang.term_to_binary(term) |> then(&:crypto.hash(:blake2b, &1))
 
     animal = Enum.at(@animals, animal_id)
-    color = Enum.at(@colors, color_id)
+    color = Map.keys(@colors) |> Enum.at(color_id)
     {animal, color}
   end
 end
