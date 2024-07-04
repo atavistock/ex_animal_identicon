@@ -15,7 +15,7 @@ Usage examples
 ```elixir
 def deps do
   [
-    {:ex_animal_identicon, "~> 0.1.0", github: "atavistock/ex_animal_identicon"}
+    {:ex_animal_identicon, "~> 0.1.2", github: "atavistock/ex_animal_identicon"}
   ]
 end
 ```
