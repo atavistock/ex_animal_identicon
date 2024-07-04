@@ -89,6 +89,7 @@ defmodule ExAnimalIdenticon do
   @spec create(any()) :: t()
   def create(term, opts \\ []) do
     {animal, color} = identicon_from_term(term)
+
     %__MODULE__{
       svg: svg(animal, color, opts),
       name: name(animal, color)
@@ -98,13 +99,12 @@ defmodule ExAnimalIdenticon do
   @spec svg(binary, binary, Keyword.t()) :: nonempty_binary()
   defp svg(animal, color, opts) do
     radius = if(opts[:type] == :circle, do: "border-radius: 50%;", else: nil)
-    size = opts[:size] || 128
-    dimensions = "height: #{size}px; width: #{size}px"
+    size = opts[:size] || 96
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
 
     """
-      <svg viewBox="0 0 128 128" style="background-color: #{color}; #{dimensions}; #{radius}">
-        <image xlink:href="#{url}" style="#{dimensions};"></image>
+      <svg viewBox="0 0 128 128" height="#{size}px" width="#{size}px" style="background-color: #{color}; #{radius}">
+        <image xlink:href="#{url}" style="height: #{size}px; width: #{size}px;"></image>
       </svg>
     """
     |> String.replace(~r/\s+/, " ")
