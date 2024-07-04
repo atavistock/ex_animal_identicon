@@ -2,12 +2,15 @@
 
 Reproduction of Animal Identicon done in Elixir
 
-Simple user icons in 4096 patterns (64 animals and 64 colors).  Results come back as a tuple with the svg content as the first part and the name `"#{color} #{animal}"` as the second part.
+Simple user icons in 4096 patterns (64 animals and 64 colors).
+
+Calls to `create(term)` are deterministic and will always return the same values for the same input.  Results come back as a struct with svg and name keys.
 
 Usage examples
 ```
-  {"<svg ...>", "Red Moose"} = ExAnimalIdenticon.generate(id)
-  {"<svg ...>", "Neon Pink Monkey"} = ExAnimalIdenticon.generate(user.name)
+  identicon = ExAnimalIdenticon.create(id)
+  identicon.svg # "<svg ...>"
+  identicon.name # "Neon Pink Monkey"
 ```
 
 ## Installation
@@ -15,7 +18,7 @@ Usage examples
 ```elixir
 def deps do
   [
-    {:ex_animal_identicon, "~> 0.1.2", github: "atavistock/ex_animal_identicon"}
+    {:ex_animal_identicon, "~> 0.1.5", github: "atavistock/ex_animal_identicon"}
   ]
 end
 ```

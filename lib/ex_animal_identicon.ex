@@ -4,6 +4,10 @@ defmodule ExAnimalIdenticon do
     background color
   """
 
+  defstruct name: nil, svg: nil
+
+  @type t :: %__MODULE__{}
+
   @animals ~w(
     alligator anteater armadillo auroch badger bat beaver buffalo camel capybara
     chameleon cheetah chinchilla chipmunk chupacabra cormorant coyote crow dingo
@@ -81,13 +85,15 @@ defmodule ExAnimalIdenticon do
     "#6495ED" => "Cornflower Blue"
   }
 
-  @spec generate(any(), Keyword.t()) :: {nonempty_binary, nonempty_binary}
-  @spec generate(any()) :: {nonempty_binary(), nonempty_binary()}
-  def generate(term, opts \\ []) do
+  @spec create(any(), Keyword.t()) :: t()
+  @spec create(any()) :: t()
+  def create(term, opts \\ []) do
     {animal, color} = identicon_from_term(term)
-    {svg(animal, color, opts), name(animal, color)}
+    %__MODULE__{
+      svg: svg(animal, color, opts),
+      name: name(animal, color)
+    }
   end
-
 
   @spec svg(binary, binary, Keyword.t()) :: nonempty_binary()
   defp svg(animal, color, opts) do
@@ -97,8 +103,8 @@ defmodule ExAnimalIdenticon do
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
 
     """
-      <svg style="background-color: #{color}; #{dimensions}; #{radius}">
-        <image xlink:href="#{url}" style="#{dimensions}:></image>
+      <svg viewBox="0 0 128 128" style="background-color: #{color}; #{dimensions}; #{radius}">
+        <image xlink:href="#{url}" style="#{dimensions};"></image>
       </svg>
     """
     |> String.replace(~r/\s+/, " ")

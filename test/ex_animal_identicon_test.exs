@@ -1,61 +1,53 @@
 defmodule ExAnimalIdenticonTest do
   use ExUnit.Case
 
-  test "generates an svg" do
-    {:ok, result} = ExAnimalIdenticon.generate(1)
-    svg = Map.get(result, :svg)
-    assert String.contains?(svg, "</svg>")
+  test "creates an svg" do
+    identicon = ExAnimalIdenticon.create(1)
+    assert String.contains?(identicon.svg, "</svg>")
   end
 
   test "has a background color" do
-    {:ok, result} = ExAnimalIdenticon.generate(1)
-    svg = Map.get(result, :svg)
-    assert String.match?(svg, ~r<background-color: #[0-9a-f]{6}>)
+    identicon = ExAnimalIdenticon.create(1)
+    assert String.match?(identicon.svg, ~r<background-color: #[0-9a-f]{6}>)
   end
 
   test "has an animal link" do
-    {:ok, result} = ExAnimalIdenticon.generate(1)
-    svg = Map.get(result, :svg)
-    assert String.match?(svg, ~r<profile/\w{3,}_lg.png>)
+    identicon = ExAnimalIdenticon.create(1)
+    assert String.match?(identicon.svg, ~r<profile/\w{3,}_lg.png>)
   end
 
-  test "can generate a name" do
-    {:ok, result} = ExAnimalIdenticon.generate(1)
-    name = Map.get(result, :name)
-    assert String.length(name) > 5
+  test "can create a name" do
+    identicon = ExAnimalIdenticon.create(1)
+    assert String.length(identicon.name) > 5
   end
 
   test "supports any term" do
-    {:ok, result} = ExAnimalIdenticon.generate(:foo)
-    svg = Map.get(result, :svg)
-    assert String.contains?(svg, "</svg>")
+    identicon = ExAnimalIdenticon.create(:foo)
+    assert String.contains?(identicon.svg, "</svg>")
 
-    {:ok, result} = ExAnimalIdenticon.generate(%{})
-    svg = Map.get(result, :svg)
-    assert String.contains?(svg, "</svg>")
+    identicon = ExAnimalIdenticon.create(%{foo: :bar})
+    assert String.contains?(identicon.svg, "</svg>")
   end
 
   test "is different for different terms" do
-    {:ok, result1} = ExAnimalIdenticon.generate(1)
-    {:ok, result2} = ExAnimalIdenticon.generate(2)
+    result1 = ExAnimalIdenticon.create(1)
+    result2 = ExAnimalIdenticon.create(2)
     assert result1 != result2
   end
 
   test "is the same for the same term" do
-    {:ok, result1} = ExAnimalIdenticon.generate("foo")
-    {:ok, result2} = ExAnimalIdenticon.generate("foo")
+    result1 = ExAnimalIdenticon.create("foo")
+    result2 = ExAnimalIdenticon.create("foo")
     assert result1 == result2
   end
 
   test "svg supports a size option" do
-    {:ok, result} = ExAnimalIdenticon.generate("blah", size: 48)
-    svg = Map.get(result, :svg)
-    assert String.contains?(svg, "width: 48px")
+    identicon = ExAnimalIdenticon.create("blah", size: 48)
+    assert String.contains?(identicon.svg, "width: 48px;")
   end
 
   test "svg supports a circle option" do
-    {:ok, result} = ExAnimalIdenticon.generate("blah", type: :circle)
-    svg = Map.get(result, :svg)
-    assert String.contains?(svg, "border-radius: 50%")
+    identicon = ExAnimalIdenticon.create("blah", type: :circle)
+    assert String.contains?(identicon.svg, "border-radius: 50%;")
   end
 end
