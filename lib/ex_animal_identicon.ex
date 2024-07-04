@@ -81,16 +81,11 @@ defmodule ExAnimalIdenticon do
     "#6495ED" => "Cornflower Blue"
   }
 
-  @spec generate(any(), Keyword.t()) :: {:ok, %{svg: binary, name: binary}}
+  @spec generate(any(), Keyword.t()) :: {nonempty_binary, nonempty_binary}
+  @spec generate(any()) :: {nonempty_binary(), nonempty_binary()}
   def generate(term, opts \\ []) do
     {animal, color} = identicon_from_term(term)
-
-    result = %{
-      svg: svg(animal, color, opts),
-      name: name(animal, color)
-    }
-
-    {:ok, result}
+    {svg(animal, color, opts), name(animal, color)}
   end
 
 

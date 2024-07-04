@@ -2,12 +2,12 @@
 
 Reproduction of Animal Identicon done in Elixir
 
-Simple user icons in 4096 patterns (64 animals and 64 colors)
+Simple user icons in 4096 patterns (64 animals and 64 colors).  Results come back as a tuple with the svg content as the first part and the name `"#{color} #{animal}"` as the second part.
 
 Usage examples
 ```
-  {:ok, icon} = ExAnimalIdenticon.svg(id)
-  {:ok, icon} = ExAnimalIdenticon.svg(user.name)
+  {"<svg ...>", "Red Moose"} = ExAnimalIdenticon.generate(id)
+  {"<svg ...>", "Neon Pink Monkey"} = ExAnimalIdenticon.generate(user.name)
 ```
 
 ## Installation
