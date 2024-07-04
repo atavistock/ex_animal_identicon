@@ -103,8 +103,8 @@ defmodule ExAnimalIdenticon do
     url = "https://ssl.gstatic.com/docs/common/profile/#{animal}_lg.png"
 
     """
-      <svg viewBox="0 0 128 128" height="#{size}px" width="#{size}px" style="background-color: #{color}; #{radius}">
-        <image xlink:href="#{url}" style="height: #{size}px; width: #{size}px;"></image>
+      <svg viewBox="0 0 128 128" style="background-color: #{color}; height: #{size}px; width: #{size}px; #{radius}">
+        <image href="#{url}" height="128px" width="128px"></image>
       </svg>
     """
     |> String.replace(~r/\s+/, " ")
