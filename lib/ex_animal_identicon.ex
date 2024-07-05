@@ -11,7 +11,7 @@ defmodule ExAnimalIdenticon do
   alias ExAnimalIdenticon.Animal
   alias ExAnimalIdenticon.Color
 
-  @spec create(any(), Keyword.t()) :: t()
+  @spec create(any(), list()) :: t()
   @spec create(any()) :: t()
   def create(term, opts \\ []) do
     {animal_id, color_id} = identicon_from_term(term)
@@ -25,7 +25,7 @@ defmodule ExAnimalIdenticon do
     }
   end
 
-  @spec build_svg(Animal.t(), Color.t(), Keywords.t()) :: t()
+  @spec build_svg(Animal.t(), Color.t(), list()) :: t()
   defp build_svg(animal, color, opts) do
     rounded = if(opts[:type] == :circle, do: "border-radius: 9999px;", else: "")
     size = opts[:size] || 96
@@ -39,7 +39,7 @@ defmodule ExAnimalIdenticon do
     |> String.replace(~r/\s+/, " ")
   end
 
-  @spec identicon_from_term(any) :: {binary, binary}
+  @spec identicon_from_term(any) :: {non_neg_integer, non_neg_integer}
   defp identicon_from_term(term) do
     <<
       _::size(48),
