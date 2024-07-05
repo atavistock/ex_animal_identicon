@@ -4,7 +4,7 @@ defmodule ExAnimalIdenticon.MixProject do
   def project do
     [
       app: :ex_animal_identicon,
-      version: "0.1.6",
+      version: "0.1.9",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -14,7 +14,7 @@ defmodule ExAnimalIdenticon.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :inets, :public_key]
     ]
   end
 
