@@ -23,7 +23,5 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/ex_animal_identicon>.
+After running `mix deps.get` you will want to copy the images to your project by running `mix animal_identicons.image_clone`
 
