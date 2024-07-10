@@ -5,13 +5,13 @@ defmodule ExAnimalIdenticon.Animal do
   defstruct [:name, :value]
 
   @animals ~w(
-    alligator anteater armadillo auroch badger bat beaver buffalo camel capybara
+    alligator anteater armadillo badger bat beaver buffalo camel capybara
     chameleon cheetah chinchilla chipmunk chupacabra cormorant coyote crow dingo
-    dolphin duck elephant ferret fox giraffe gopher grizzly hippo hyena ibex
+    dolphin duck elephant ferret fox giraffe gopher grizzly hedgehog hyena ibex
     iguana jackal kangaroo koala kraken lemur leopard liger llama manatee
     mink monkey moose narwhal orangutan otter panda penguin platypus python
     quagga rabbit raccoon rhino sheep shrew skunk squirrel tiger turtle
-    walrus wolf wolverine wombat
+    unicorn walrus wolf wolverine wombat
   )
 
   @spec get(non_neg_integer) :: t()

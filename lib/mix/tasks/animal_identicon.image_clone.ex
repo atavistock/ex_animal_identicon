@@ -3,11 +3,15 @@ defmodule Mix.Tasks.AnimalIdenticon.ImageClone do
   @shortdoc "tools for managing word lists"
 
   use Mix.Task
-
   alias ExAnimalIdenticon.Animal
 
   @impl Mix.Task
   def run(_) do
+    Mix.ensure_application!(:inets)
+    Mix.ensure_application!(:public_key)
+
+    :inets.start()
+
     :ok = ensure_directory()
 
     Animal.list()
@@ -16,6 +20,8 @@ defmodule Mix.Tasks.AnimalIdenticon.ImageClone do
       image_file = Animal.image_file(animal)  |> String.to_charlist()
       :httpc.request(:get, {url, []}, [], [{:stream, image_file}])
     end)
+
+    :ok
   end
 
   @spec ensure_directory() :: :ok | {:error, atom()}
