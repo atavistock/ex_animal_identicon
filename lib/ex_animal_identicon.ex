@@ -25,7 +25,7 @@ defmodule ExAnimalIdenticon do
     }
   end
 
-  @spec build_svg(Animal.t(), Color.t(), list()) :: t()
+  @spec build_svg(Animal.t(), Color.t(), list()) :: binary
   defp build_svg(animal, color, opts) do
     rounded = if(opts[:type] == :circle, do: "border-radius: 9999px;", else: "")
     size = opts[:size] || 96
