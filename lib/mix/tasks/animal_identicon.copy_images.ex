@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.AnimalIdenticon.ImageClone do
+defmodule Mix.Tasks.AnimalIdenticon.CopyImages do
   @moduledoc "Utilities for helping to manage word lists like the dictionary"
   @shortdoc "tools for managing word lists"
 
