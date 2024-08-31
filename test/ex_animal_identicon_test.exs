@@ -13,7 +13,7 @@ defmodule ExAnimalIdenticonTest do
 
   test "has an animal link" do
     identicon = ExAnimalIdenticon.create(1)
-    assert String.match?(identicon.svg, ~r<profile/\w{3,}_lg.png>)
+    assert String.match?(identicon.svg, ~r</animal_identicons/\w{3,}_lg.png>)
   end
 
   test "can create a name" do
@@ -43,11 +43,11 @@ defmodule ExAnimalIdenticonTest do
 
   test "svg supports a size option" do
     identicon = ExAnimalIdenticon.create("blah", size: 48)
-    assert String.contains?(identicon.svg, "width: 48px;")
+    assert String.contains?(identicon.svg, "width:48px;")
   end
 
   test "svg supports a circle option" do
     identicon = ExAnimalIdenticon.create("blah", type: :circle)
-    assert String.contains?(identicon.svg, "border-radius: 50%;")
+    assert String.contains?(identicon.svg, "border-radius: 9999px")
   end
 end
