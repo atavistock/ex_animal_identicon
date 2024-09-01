@@ -5,6 +5,7 @@ defmodule ExAnimalIdenticon.Component do
   attr :container_class, :string
   attr :name_class, :string
   attr :icon_class, :string
+  attr :name, :string, default: nil
   def avatar(assigns) do
     assigns =
       assigns
@@ -14,7 +15,7 @@ defmodule ExAnimalIdenticon.Component do
     ~H"""
     <div class={@container_class}>
       <.icon {assigns} />
-      <div class={@name_class}><%= @identicon.name %></div>
+      <div class={@name_class}><%= @name | @identicon.name %></div>
     </div>
     """
   end
