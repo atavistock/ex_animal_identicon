@@ -2,36 +2,34 @@ defmodule ExAnimalIdenticon.Component do
   use Phoenix.Component
 
   attr :id, :any, required: true
-  attr :container_class, :string
-  attr :name_class, :string
-  attr :icon_class, :string
   attr :name, :string, default: nil
+  attr :name_class, :string, default: nil
+  attr :icon_class, :string, default: nil
+  attr :icon_size, :integer, default: 128
+
   def avatar(assigns) do
-    assigns =
-      assigns
-      |> assign_new(:identicon, fn -> create_identicon(assigns) end)
-      |> assign_new(:container_class, fn -> "rounded bg-base-100 w-48 flex flex-row p-1" end)
-      |> assign_new(:name_class, fn -> "self-center pl-1 text-base-content text-xs" end)
+    assigns = assign_new(assigns, :identicon, fn -> create_identicon(assigns) end)
     ~H"""
-    <div class={@container_class}>
+    <div class="flex flex-row">
       <.icon {assigns} />
-      <div class={@name_class}><%= @name | @identicon.name %></div>
+      <div class={@name_class}><%= @name || @identicon.name %></div>
     </div>
     """
   end
 
   attr :id, :any, required: true
-  attr :icon_class, :string
+  attr :icon_class, :string, default: nil
+  attr :icon_size, :integer, default: 128
+
   def icon(assigns) do
-    assigns =
-      assigns
-      |> assign_new(:identicon, fn -> create_identicon(assigns) end)
-      |> assign_new(:icon_class, fn -> "border-base-content" end)
+    assigns = assign_new(assigns, :identicon, fn -> create_identicon(assigns) end)
     ~H"""
     <div alt={@identicon.name} class={@icon_class}><%= {:safe, @identicon.svg} %></div>
     """
   end
 
-  defp create_identicon(%{id: id}), do: ExAnimalIdenticon.create(id)
+  defp create_identicon(%{id: id, icon_size: size}) do
+    ExAnimalIdenticon.create(id, size: size)
+  end
 
 end
